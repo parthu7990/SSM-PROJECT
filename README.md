@@ -1,4 +1,4 @@
-# SSM Future Innovation FZE - Website Upgrade
+# PSK Future Innovation FZE - Website Upgrade
 
 A modern, fully-featured Django-based website with glassmorphism effects, responsive design, and a custom admin panel.
 
@@ -75,11 +75,11 @@ Then in the Python shell:
 ```python
 from core.models import CompanyInfo
 CompanyInfo.objects.create(
-    company_name='SSM Future Innovation FZE',
+    company_name='PSK Future Innovation FZE',
     tagline='Enterprise Innovation With Measurable Impact',
     about_text='Based in Sharjah Publishing City Free Zone, UAE, SSM Future Innovation FZE partners with enterprises navigating modernization, digital expansion, and strategic repositioning in competitive markets.',
-    email='info@ssmfutureinnovation.com',
-    phone='+971 58 268 4800',
+    email='parth20098@gmail.com',
+    phone='+917990661705',
     address='Sharjah Publishing City Free Zone, Sharjah, United Arab Emirates'
 )
 exit()
@@ -211,8 +211,8 @@ Use the custom admin panel at `/admin/` to:
 ## 📧 Contact Information
 
 The website uses:
-- **Email**: info@ssmfutureinnovation.com
-- **Phone**: +971 58 268 4800
+- **Email**: parth20098@gmail.com
+- **Phone**: +917990661705
 - **Address**: Sharjah Publishing City Free Zone, Sharjah, UAE
 
 These can be updated through the admin panel under "Company Info".
@@ -242,7 +242,7 @@ Copyright © 2026 SSM Future Innovation FZE. All rights reserved.
 
 ## 🤝 Support
 
-For support, email info@ssmfutureinnovation.com or call +971 58 268 4800.
+For support, email parth20098@gmail.com or call +91 7990661705.
 
 ## 🎯 Features Checklist
 
