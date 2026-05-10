@@ -1,0 +1,633 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<!-- ============================================================
+     HERO SECTION
+============================================================ -->
+<section id="home" class="hero-section">
+
+  {% if hero_slides %}
+  <!-- === DYNAMIC SLIDER === -->
+  <div class="hero-slider" id="heroSlider">
+    {% for slide in hero_slides %}
+    <div class="hero-slide {% if forloop.first %}active{% endif %}"
+         style="background-image:url('{{ slide.image_url }}')">
+      <div class="hero-overlay"></div>
+      <div class="container">
+        <div class="hero-content glass-card" data-aos="fade-up" data-aos-delay="200">
+          <span class="hero-eyebrow">UAE Enterprise Solutions</span>
+          <h1 class="hero-title">{{ slide.title }}</h1>
+          <p class="hero-subtitle">{{ slide.subtitle }}</p>
+          {% if slide.description %}<p class="hero-desc">{{ slide.description }}</p>{% endif %}
+          <div class="hero-actions">
+            <a href="{{ slide.cta_link }}" class="glass-btn btn-primary pulse-btn">
+              {{ slide.cta_text }} <i class="fas fa-arrow-right"></i>
+            </a>
+            <a href="#about" class="glass-btn btn-ghost">
+              Explore More <i class="fas fa-chevron-down"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+
+    <!-- Dots -->
+    <div class="slider-dots" id="sliderDots">
+      {% for slide in hero_slides %}
+      <button class="dot {% if forloop.first %}active{% endif %}" data-slide="{{ forloop.counter0 }}"></button>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- Controls only when more than one slide -->
+  {% if hero_slides|length > 1 %}
+  <button class="slider-arrow prev-arrow glass-btn" id="prevBtn"><i class="fas fa-chevron-left"></i></button>
+  <button class="slider-arrow next-arrow glass-btn" id="nextBtn"><i class="fas fa-chevron-right"></i></button>
+  {% endif %}
+
+  {% else %}
+  <!-- === FALLBACK HERO (no images needed) === -->
+  <div class="hero-fallback">
+    <div class="hero-overlay fallback-overlay"></div>
+    <div class="container">
+      <div class="hero-content glass-card" data-aos="fade-up">
+        <span class="hero-eyebrow">UAE Enterprise Solutions</span>
+        <h1 class="hero-title">Enterprise Innovation<br>With Measurable Impact</h1>
+        <p class="hero-subtitle">Delivering strategic transformation frameworks and digital expansion architectures that empower enterprises to scale, modernize, and lead with confidence across the UAE.</p>
+        <div class="hero-actions">
+          <a href="#contact" class="glass-btn btn-primary pulse-btn">Schedule Consultation <i class="fas fa-arrow-right"></i></a>
+          <a href="#about" class="glass-btn btn-ghost">Explore More <i class="fas fa-chevron-down"></i></a>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- Scroll indicator -->
+  <div class="scroll-indicator">
+    <div class="mouse"><div class="mouse-wheel"></div></div>
+    <span>Scroll Down</span>
+  </div>
+
+</section>
+
+
+<!-- ============================================================
+     ABOUT SECTION
+============================================================ -->
+<section id="about" class="about-section section-padding">
+  <div class="container">
+
+    <div class="section-header" data-aos="fade-up">
+      <span class="section-tag"><i class="fas fa-building"></i> About Us</span>
+      <h2 class="section-title">Strategic Growth Through Innovation</h2>
+      <p class="section-description">Based in Sharjah Publishing City Free Zone, UAE, we partner with enterprises navigating modernization, digital expansion, and strategic repositioning.</p>
+    </div>
+
+    <div class="about-grid">
+
+      <div class="about-text-block" data-aos="fade-right">
+        <div class="glass-card about-card">
+          <div class="about-icon-row">
+            <div class="about-icon"><i class="fas fa-rocket"></i></div>
+            <h3>Our Mission</h3>
+          </div>
+          <p>Empowering forward-thinking organizations to scale with confidence and clarity through enterprise-grade IT infrastructure, creative branding, and digital transformation solutions.</p>
+          <div class="feature-list">
+            <div class="feature-item"><i class="fas fa-check-circle"></i><span>Strategic IT Infrastructure</span></div>
+            <div class="feature-item"><i class="fas fa-check-circle"></i><span>Digital Transformation</span></div>
+            <div class="feature-item"><i class="fas fa-check-circle"></i><span>Creative Branding &amp; Design</span></div>
+            <div class="feature-item"><i class="fas fa-check-circle"></i><span>Social Media Marketing</span></div>
+          </div>
+          <a href="#contact" class="glass-btn btn-primary" style="margin-top:30px;display:inline-flex;">
+            Partner With Us <i class="fas fa-handshake"></i>
+          </a>
+        </div>
+      </div>
+
+      <div class="about-stats-block" data-aos="fade-left">
+        <div class="stats-grid">
+          <div class="stat-card glass-card">
+            <div class="stat-icon" style="background:linear-gradient(135deg,#6366f1,#8b5cf6)"><i class="fas fa-users"></i></div>
+            <div class="stat-num" data-target="{{ total_clients }}">0</div>
+            <div class="stat-label">Global Clients</div>
+          </div>
+          <div class="stat-card glass-card">
+            <div class="stat-icon" style="background:linear-gradient(135deg,#ec4899,#f43f5e)"><i class="fas fa-cogs"></i></div>
+            <div class="stat-num" data-target="{{ services.count }}">0</div>
+            <div class="stat-label">Core Services</div>
+          </div>
+          <div class="stat-card glass-card">
+            <div class="stat-icon" style="background:linear-gradient(135deg,#22c55e,#16a34a)"><i class="fas fa-star"></i></div>
+            <div class="stat-num" data-target="100">0</div>
+            <div class="stat-label">% Satisfaction</div>
+          </div>
+          <div class="stat-card glass-card">
+            <div class="stat-icon" style="background:linear-gradient(135deg,#f59e0b,#d97706)"><i class="fas fa-calendar-check"></i></div>
+            <div class="stat-num" data-target="5">0</div>
+            <div class="stat-label">Years Experience</div>
+          </div>
+        </div>
+
+        <div class="location-card glass-card" data-aos="zoom-in" data-aos-delay="200">
+          <i class="fas fa-map-marker-alt"></i>
+          <div>
+            <strong>Headquarters</strong>
+            <p>Sharjah Publishing City Free Zone, UAE</p>
+          </div>
+          <div class="uae-flag">🇦🇪</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     SERVICES SECTION
+============================================================ -->
+<section id="services" class="services-section section-padding">
+  <div class="container">
+
+    <div class="section-header" data-aos="fade-up">
+      <span class="section-tag"><i class="fas fa-layer-group"></i> Our Expertise</span>
+      <h2 class="section-title">Core Capabilities Driving Growth</h2>
+      <p class="section-description">Delivering strategic, creative, and technology-led solutions that empower enterprises to innovate, scale, and lead markets.</p>
+    </div>
+
+    {% if services %}
+    <div class="services-grid">
+      {% for service in services %}
+      <div class="service-card glass-card" data-aos="zoom-in" data-aos-delay="{{ forloop.counter0 }}00">
+
+        <!-- Image or gradient placeholder -->
+        {% if service.image_url %}
+        <div class="service-image-wrap">
+          <img src="{{ service.image_url }}" alt="{{ service.title }}" loading="lazy">
+          <div class="service-image-overlay"></div>
+          <div class="service-category-badge">{{ service.get_category_display }}</div>
+        </div>
+        {% else %}
+        <div class="service-image-wrap service-gradient-wrap
+          {% if service.category == 'it' %}grad-it
+          {% elif service.category == 'creative' %}grad-creative
+          {% elif service.category == 'digital' %}grad-digital
+          {% else %}grad-marketing{% endif %}">
+          <div class="service-placeholder-icon">
+            {% if service.category == 'it' %}<i class="fas fa-server"></i>
+            {% elif service.category == 'creative' %}<i class="fas fa-palette"></i>
+            {% elif service.category == 'digital' %}<i class="fas fa-globe"></i>
+            {% else %}<i class="fas fa-hashtag"></i>{% endif %}
+          </div>
+          <div class="service-category-badge">{{ service.get_category_display }}</div>
+        </div>
+        {% endif %}
+
+        <div class="service-body">
+          <div class="service-icon-wrap">
+            {% if service.icon_url %}<img src="{{ service.icon_url }}" alt="icon" class="service-icon-img">
+            {% elif service.category == 'it' %}<i class="fas fa-server"></i>
+            {% elif service.category == 'creative' %}<i class="fas fa-palette"></i>
+            {% elif service.category == 'digital' %}<i class="fas fa-globe"></i>
+            {% else %}<i class="fas fa-hashtag"></i>{% endif %}
+          </div>
+          <h3>{{ service.title }}</h3>
+          <p>{{ service.description|truncatewords:25 }}</p>
+          <ul class="service-features">
+            {% for item in service.items.all|slice:":4" %}
+            <li><i class="fas fa-check"></i>{{ item.title }}</li>
+            {% endfor %}
+          </ul>
+          {% if service.items.count > 4 %}
+          <div class="service-extra" style="display:none">
+            <ul class="service-features">
+              {% for item in service.items.all|slice:"4:" %}
+              <li><i class="fas fa-check"></i>{{ item.title }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+          <button class="toggle-service-btn" onclick="toggleService(this)">
+            <span>Show all {{ service.items.count }} features</span>
+            <i class="fas fa-chevron-down"></i>
+          </button>
+          {% endif %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+  </div>
+</section>
+
+
+
+<!-- ============================================================
+     DIGITAL BLUEPRINTS SECTION
+============================================================ -->
+<section id="blueprints" class="blueprints-section section-padding">
+  <div class="container">
+
+    <div class="section-header" data-aos="fade-up">
+      <span class="section-tag"><i class="fas fa-drafting-compass"></i> Digital Blueprints</span>
+      <h2 class="section-title">How We Deliver Results</h2>
+      <p class="section-description">A proven four-phase framework that takes your idea from strategy to measurable impact — on time, every time.</p>
+    </div>
+
+    <div class="blueprints-grid">
+
+      <div class="blueprint-card glass-card" data-aos="fade-up" data-aos-delay="0">
+        <div class="bp-number">01</div>
+        <div class="bp-icon" style="background:linear-gradient(135deg,#6366f1,#8b5cf6)">
+          <i class="fas fa-search"></i>
+        </div>
+        <h3>Discovery & Strategy</h3>
+        <p>We start by deeply understanding your business goals, competitive landscape, and technology environment — producing a clear roadmap before a single line of code is written.</p>
+        <ul class="bp-list">
+          <li><i class="fas fa-check"></i>Stakeholder Workshops</li>
+          <li><i class="fas fa-check"></i>Market & Competitor Research</li>
+          <li><i class="fas fa-check"></i>Technical Architecture Design</li>
+          <li><i class="fas fa-check"></i>Project Roadmap & KPI Definition</li>
+        </ul>
+      </div>
+
+      <div class="blueprint-card glass-card" data-aos="fade-up" data-aos-delay="100">
+        <div class="bp-number">02</div>
+        <div class="bp-icon" style="background:linear-gradient(135deg,#ec4899,#f43f5e)">
+          <i class="fas fa-pencil-ruler"></i>
+        </div>
+        <h3>Design & Prototype</h3>
+        <p>Our creative team transforms strategy into stunning visuals and interactive prototypes — refining the experience until every stakeholder is aligned and confident.</p>
+        <ul class="bp-list">
+          <li><i class="fas fa-check"></i>UI/UX Wireframing</li>
+          <li><i class="fas fa-check"></i>Brand Identity Creation</li>
+          <li><i class="fas fa-check"></i>Interactive Prototype Testing</li>
+          <li><i class="fas fa-check"></i>Design System Documentation</li>
+        </ul>
+      </div>
+
+      <div class="blueprint-card glass-card" data-aos="fade-up" data-aos-delay="200">
+        <div class="bp-number">03</div>
+        <div class="bp-icon" style="background:linear-gradient(135deg,#22c55e,#0891b2)">
+          <i class="fas fa-code"></i>
+        </div>
+        <h3>Build & Integrate</h3>
+        <p>Agile development sprints with continuous integration ensure your solution is built to enterprise standards — secure, scalable, and fully integrated with your existing systems.</p>
+        <ul class="bp-list">
+          <li><i class="fas fa-check"></i>Agile Sprint Development</li>
+          <li><i class="fas fa-check"></i>API & Third-party Integrations</li>
+          <li><i class="fas fa-check"></i>QA Testing & Security Audits</li>
+          <li><i class="fas fa-check"></i>Performance Optimisation</li>
+        </ul>
+      </div>
+
+      <div class="blueprint-card glass-card" data-aos="fade-up" data-aos-delay="300">
+        <div class="bp-number">04</div>
+        <div class="bp-icon" style="background:linear-gradient(135deg,#f59e0b,#ef4444)">
+          <i class="fas fa-chart-line"></i>
+        </div>
+        <h3>Launch & Scale</h3>
+        <p>We don't just deploy and disappear. Our team monitors performance post-launch, optimises campaigns, and scales infrastructure as your business grows.</p>
+        <ul class="bp-list">
+          <li><i class="fas fa-check"></i>Production Deployment</li>
+          <li><i class="fas fa-check"></i>Performance Monitoring (24/7)</li>
+          <li><i class="fas fa-check"></i>Marketing Campaign Activation</li>
+          <li><i class="fas fa-check"></i>Ongoing Support & Iteration</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- Process Flow Bar -->
+    <div class="process-flow glass-card" data-aos="fade-up" data-aos-delay="400">
+      <div class="pf-item">
+        <div class="pf-dot" style="background:#6366f1"></div>
+        <span>Discovery</span>
+      </div>
+      <div class="pf-line"></div>
+      <div class="pf-item">
+        <div class="pf-dot" style="background:#ec4899"></div>
+        <span>Design</span>
+      </div>
+      <div class="pf-line"></div>
+      <div class="pf-item">
+        <div class="pf-dot" style="background:#22c55e"></div>
+        <span>Build</span>
+      </div>
+      <div class="pf-line"></div>
+      <div class="pf-item">
+        <div class="pf-dot" style="background:#f59e0b"></div>
+        <span>Launch</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ============================================================
+     CLIENTS SECTION
+============================================================ -->
+<section id="clients" class="clients-section section-padding">
+  <div class="container">
+    <div class="section-header" data-aos="fade-up">
+      <span class="section-tag"><i class="fas fa-handshake"></i> Our Customers</span>
+      <h2 class="section-title">Global Digital Footprints</h2>
+      <p class="section-description">Trusted by enterprises and growing businesses across the UAE and beyond.</p>
+    </div>
+  </div>
+
+  {% if clients %}
+  <div class="marquee-wrapper">
+    <div class="marquee-track" id="marqueeTrack">
+      {% for client in clients %}
+      <div class="client-logo-card glass-card">
+        {% if client.logo_url %}
+          <img src="{{ client.logo_url }}" alt="{{ client.name }}" loading="lazy">
+        {% else %}
+          <span style="font-size:13px;font-weight:700;color:rgba(255,255,255,0.7);text-align:center;padding:0 10px;">{{ client.name }}</span>
+        {% endif %}
+        <span class="client-name-tooltip">{{ client.name }}</span>
+      </div>
+      {% endfor %}
+      {% for client in clients %}
+      <div class="client-logo-card glass-card">
+        {% if client.logo_url %}
+          <img src="{{ client.logo_url }}" alt="{{ client.name }}" loading="lazy">
+        {% else %}
+          <span style="font-size:13px;font-weight:700;color:rgba(255,255,255,0.7);text-align:center;padding:0 10px;">{{ client.name }}</span>
+        {% endif %}
+        <span class="client-name-tooltip">{{ client.name }}</span>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+</section>
+
+
+<!-- ============================================================
+     TESTIMONIALS (only shown if data exists)
+============================================================ -->
+{% if testimonials %}
+<section class="testimonials-section section-padding">
+  <div class="container">
+    <div class="section-header" data-aos="fade-up">
+      <span class="section-tag"><i class="fas fa-quote-left"></i> Testimonials</span>
+      <h2 class="section-title">What Our Clients Say</h2>
+    </div>
+    <div class="testimonials-grid">
+      {% for t in testimonials %}
+      <div class="testimonial-card glass-card" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|add:'1' }}00">
+        <div class="testimonial-top">
+          <div class="stars">
+            {% for i in "12345"|make_list %}
+              <i class="fas fa-star{% if forloop.counter > t.rating %} empty{% endif %}"></i>
+            {% endfor %}
+          </div>
+          <i class="fas fa-quote-right quote-icon"></i>
+        </div>
+        <p>"{{ t.content }}"</p>
+        <div class="testimonial-author">
+          {% if t.image_url %}
+            <img src="{{ t.image_url }}" alt="{{ t.client_name }}">
+          {% else %}
+            <div class="author-avatar">{{ t.client_name|first }}</div>
+          {% endif %}
+          <div>
+            <strong>{{ t.client_name }}</strong>
+            <small>{{ t.position }} · {{ t.company }}</small>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+
+<!-- ============================================================
+     WHY CHOOSE US
+============================================================ -->
+<section class="why-section section-padding">
+  <div class="container">
+    <div class="section-header" data-aos="fade-up">
+      <span class="section-tag"><i class="fas fa-award"></i> Why Choose Us</span>
+      <h2 class="section-title">The PSK Advantage</h2>
+    </div>
+    <div class="why-grid">
+      {% for item in why_items %}{% endfor %}
+      <div class="why-card glass-card" data-aos="flip-left" data-aos-delay="0">
+        <div class="why-icon" style="background:linear-gradient(135deg,#6366f1,#8b5cf6)"><i class="fas fa-shield-alt"></i></div>
+        <h4>Enterprise Grade</h4>
+        <p>Infrastructure and solutions built for scale, performance, and security.</p>
+      </div>
+      <div class="why-card glass-card" data-aos="flip-left" data-aos-delay="100">
+        <div class="why-icon" style="background:linear-gradient(135deg,#ec4899,#f43f5e)"><i class="fas fa-clock"></i></div>
+        <h4>Fast Delivery</h4>
+        <p>Agile delivery methodologies ensuring on-time project completion.</p>
+      </div>
+      <div class="why-card glass-card" data-aos="flip-left" data-aos-delay="200">
+        <div class="why-icon" style="background:linear-gradient(135deg,#22c55e,#16a34a)"><i class="fas fa-headset"></i></div>
+        <h4>24/7 Support</h4>
+        <p>Dedicated enterprise support team available round the clock.</p>
+      </div>
+      <div class="why-card glass-card" data-aos="flip-left" data-aos-delay="300">
+        <div class="why-icon" style="background:linear-gradient(135deg,#f59e0b,#d97706)"><i class="fas fa-chart-line"></i></div>
+        <h4>Measurable ROI</h4>
+        <p>Data-driven strategies that deliver clear, measurable business impact.</p>
+      </div>
+      <div class="why-card glass-card" data-aos="flip-left" data-aos-delay="400">
+        <div class="why-icon" style="background:linear-gradient(135deg,#14b8a6,#0891b2)"><i class="fas fa-globe"></i></div>
+        <h4>UAE Expertise</h4>
+        <p>Deep understanding of the UAE business landscape and regulations.</p>
+      </div>
+      <div class="why-card glass-card" data-aos="flip-left" data-aos-delay="500">
+        <div class="why-icon" style="background:linear-gradient(135deg,#a855f7,#7c3aed)"><i class="fas fa-puzzle-piece"></i></div>
+        <h4>Custom Solutions</h4>
+        <p>Tailored strategies designed specifically for your business needs.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     CONTACT SECTION
+============================================================ -->
+<section id="contact" class="contact-section section-padding">
+  <div class="container">
+
+    <div class="section-header" data-aos="fade-up">
+      <span class="section-tag"><i class="fas fa-envelope"></i> Corporate Inquiries</span>
+      <h2 class="section-title">Let's Start a Strategic Discussion</h2>
+      <p class="section-description">Engage with our enterprise team to explore IT infrastructure, digital transformation, and scalable innovation solutions tailored to your organization.</p>
+    </div>
+
+    <div class="contact-layout">
+
+      <!-- Info Cards -->
+      <div class="contact-info-col" data-aos="fade-right">
+
+        <div class="contact-info-card glass-card">
+          <div class="ci-icon" style="background:linear-gradient(135deg,#6366f1,#8b5cf6)"><i class="fas fa-envelope"></i></div>
+          <div class="ci-body">
+            <h4>Email</h4>
+            <a href="mailto:{{ company_info.email|default:'info@pskfutureinnovation.com' }}">
+              {{ company_info.email|default:"info@pskfutureinnovation.com" }}
+            </a>
+          </div>
+        </div>
+
+        <div class="contact-info-card glass-card">
+          <div class="ci-icon" style="background:linear-gradient(135deg,#22c55e,#16a34a)"><i class="fas fa-phone"></i></div>
+          <div class="ci-body">
+            <h4>Contact Number</h4>
+            <a href="tel:{{ company_info.phone|default:'+97158268480' }}">
+              {{ company_info.phone|default:"+971 58 268 4800" }}
+            </a>
+          </div>
+        </div>
+
+        <div class="contact-info-card glass-card">
+          <div class="ci-icon" style="background:linear-gradient(135deg,#f59e0b,#d97706)"><i class="fas fa-map-marker-alt"></i></div>
+          <div class="ci-body">
+            <h4>Address</h4>
+            <p>{{ company_info.address|default:"Sharjah Publishing City Free Zone, Sharjah, United Arab Emirates" }}</p>
+          </div>
+        </div>
+
+        <div class="contact-info-card glass-card">
+          <div class="ci-icon" style="background:linear-gradient(135deg,#25D366,#128C7E)"><i class="fab fa-whatsapp"></i></div>
+          <div class="ci-body">
+            <h4>WhatsApp</h4>
+            <a href="https://wa.me/97158268480" target="_blank">Chat with us instantly</a>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Contact Form -->
+      <div class="contact-form-col" data-aos="fade-left">
+        <div class="contact-form-card glass-card">
+          <h3>Submit an Inquiry</h3>
+          <p style="color:var(--text-secondary);margin-bottom:30px;font-size:15px;">We typically respond within 24 business hours.</p>
+
+          <form id="contactForm" novalidate>
+            {% csrf_token %}
+            <div class="form-row-2">
+              <div class="form-field">
+                <label>Full Name *</label>
+                <div class="input-wrap"><i class="fas fa-user"></i><input type="text" name="name" placeholder="John Smith" required></div>
+              </div>
+              <div class="form-field">
+                <label>Email Address *</label>
+                <div class="input-wrap"><i class="fas fa-envelope"></i><input type="email" name="email" placeholder="john@company.com" required></div>
+              </div>
+            </div>
+            <div class="form-row-2">
+              <div class="form-field">
+                <label>Phone Number *</label>
+                <div class="input-wrap"><i class="fas fa-phone"></i><input type="tel" name="phone" placeholder="+971 58 268 4800" required></div>
+              </div>
+              <div class="form-field">
+                <label>Company Name</label>
+                <div class="input-wrap"><i class="fas fa-building"></i><input type="text" name="company" placeholder="Your Company LLC"></div>
+              </div>
+            </div>
+            <div class="form-field">
+              <label>Subject *</label>
+              <div class="input-wrap"><i class="fas fa-tag"></i><input type="text" name="subject" placeholder="How can we help you?" required></div>
+            </div>
+            <div class="form-field">
+              <label>Message *</label>
+              <div class="input-wrap textarea-wrap"><i class="fas fa-comment-alt"></i><textarea name="message" rows="5" placeholder="Tell us about your project or requirements..." required></textarea></div>
+            </div>
+            <button type="submit" class="glass-btn btn-primary submit-btn" id="submitBtn">
+              <span class="btn-text"><i class="fas fa-paper-plane"></i> Send Inquiry</span>
+              <span class="btn-loading" style="display:none"><i class="fas fa-spinner fa-spin"></i> Sending...</span>
+            </button>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+{% endblock %}
+
+
+{% block extra_js %}
+<script>
+AOS.init({ duration: 900, once: true, offset: 80 });
+
+/* ---------- Service toggle ---------- */
+function toggleService(btn) {
+  const extra = btn.previousElementSibling;
+  const isOpen = extra.style.display === 'block';
+  extra.style.display = isOpen ? 'none' : 'block';
+  btn.querySelector('span').textContent = isOpen
+    ? btn.querySelector('span').textContent.replace('Hide','Show all')
+    : btn.querySelector('span').textContent.replace('Show all','Hide');
+  btn.querySelector('i').style.transform = isOpen ? 'rotate(0deg)' : 'rotate(180deg)';
+}
+
+/* ---------- AJAX Contact Form ---------- */
+document.getElementById('contactForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const btn     = document.getElementById('submitBtn');
+  const btnText = btn.querySelector('.btn-text');
+  const btnLoad = btn.querySelector('.btn-loading');
+
+  btnText.style.display = 'none';
+  btnLoad.style.display = 'inline-flex';
+  btn.disabled = true;
+
+  const formData = new FormData(this);
+  try {
+    const res = await fetch('{% url "contact_submit" %}', {
+      method: 'POST',
+      headers: { 'X-Requested-With': 'XMLHttpRequest' },
+      body: formData
+    });
+    const data = await res.json();
+    if (data.success) {
+      showToast(data.message, 'success');
+      this.reset();
+    } else {
+      showToast('Please fill all required fields correctly.', 'error');
+    }
+  } catch(err) {
+    showToast('Something went wrong. Please try again.', 'error');
+  } finally {
+    btnText.style.display = 'inline-flex';
+    btnLoad.style.display = 'none';
+    btn.disabled = false;
+  }
+});
+
+/* ---------- AJAX Newsletter ---------- */
+document.getElementById('newsletterForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const formData = new FormData(this);
+  try {
+    const res  = await fetch('{% url "newsletter_subscribe" %}', {
+      method: 'POST',
+      headers: { 'X-Requested-With': 'XMLHttpRequest' },
+      body: formData
+    });
+    const data = await res.json();
+    showToast(data.message, data.success ? 'success' : 'error');
+    if (data.success) this.reset();
+  } catch(err) {
+    showToast('Something went wrong.', 'error');
+  }
+});
+</script>
+{% endblock %}

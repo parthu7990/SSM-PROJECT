@@ -1,0 +1,77 @@
+{% extends 'custom_admin/base.html' %}
+
+{% block title %}Inquiry Detail{% endblock %}
+{% block page_title %}Inquiry Details{% endblock %}
+
+{% block content %}
+<div class="admin-table-wrapper">
+    <div class="table-header">
+        <h2>Inquiry from {{ inquiry.name }}</h2>
+        <a href="{% url 'custom_admin:inquiries_list' %}" class="btn btn-outline btn-sm">
+            <i class="fas fa-arrow-left"></i> Back to List
+        </a>
+    </div>
+    
+    <div style="padding: 30px; color: rgba(255,255,255,0.8);">
+        <div class="form-grid">
+            <div>
+                <strong style="color: white;">Name:</strong>
+                <p>{{ inquiry.name }}</p>
+            </div>
+            <div>
+                <strong style="color: white;">Email:</strong>
+                <p>{{ inquiry.email }}</p>
+            </div>
+            <div>
+                <strong style="color: white;">Phone:</strong>
+                <p>{{ inquiry.phone }}</p>
+            </div>
+            <div>
+                <strong style="color: white;">Company:</strong>
+                <p>{{ inquiry.company|default:"Not provided" }}</p>
+            </div>
+        </div>
+        
+        <div style="margin: 30px 0;">
+            <strong style="color: white;">Subject:</strong>
+            <p>{{ inquiry.subject }}</p>
+        </div>
+        
+        <div style="margin: 30px 0;">
+            <strong style="color: white;">Message:</strong>
+            <p style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 12px; line-height: 1.8;">
+                {{ inquiry.message }}
+            </p>
+        </div>
+        
+        <div style="margin: 30px 0;">
+            <strong style="color: white;">Received:</strong>
+            <p>{{ inquiry.created_at|date:"F d, Y \a\t H:i" }}</p>
+        </div>
+        
+        <hr style="border-color: rgba(255,255,255,0.1); margin: 40px 0;">
+        
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label>Status</label>
+                <select name="status" class="form-control">
+                    <option value="new" {% if inquiry.status == 'new' %}selected{% endif %}>New</option>
+                    <option value="in_progress" {% if inquiry.status == 'in_progress' %}selected{% endif %}>In Progress</option>
+                    <option value="resolved" {% if inquiry.status == 'resolved' %}selected{% endif %}>Resolved</option>
+                    <option value="closed" {% if inquiry.status == 'closed' %}selected{% endif %}>Closed</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Admin Notes</label>
+                <textarea name="admin_notes" class="form-control" rows="5" placeholder="Add your notes here...">{{ inquiry.admin_notes }}</textarea>
+            </div>
+            
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save"></i> Update Inquiry
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}

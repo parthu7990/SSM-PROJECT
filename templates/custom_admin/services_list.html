@@ -1,0 +1,59 @@
+{% extends 'custom_admin/base.html' %}
+
+{% block title %}Services{% endblock %}
+{% block page_title %}Services Management{% endblock %}
+
+{% block content %}
+<div class="admin-table-wrapper">
+    <div class="table-header">
+        <h2>All Services</h2>
+        <a href="{% url 'custom_admin:service_create' %}" class="btn btn-primary btn-sm">
+            <i class="fas fa-plus"></i> Add Service
+        </a>
+    </div>
+    
+    <table class="admin-table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Category</th>
+                <th>Order</th>
+                <th>Status</th>
+                <th>Created</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for service in services %}
+            <tr>
+                <td>{{ service.title }}</td>
+                <td>{{ service.get_category_display }}</td>
+                <td>{{ service.order }}</td>
+                <td>
+                    {% if service.is_active %}
+                    <span class="badge badge-resolved">Active</span>
+                    {% else %}
+                    <span class="badge badge-closed">Inactive</span>
+                    {% endif %}
+                </td>
+                <td>{{ service.created_at|date:"M d, Y" }}</td>
+                <td>
+                    <a href="{% url 'custom_admin:service_edit' service.pk %}" class="btn btn-primary btn-sm">
+                        <i class="fas fa-edit"></i> Edit
+                    </a>
+                    <a href="{% url 'custom_admin:service_delete' service.pk %}" class="btn btn-danger btn-sm">
+                        <i class="fas fa-trash"></i> Delete
+                    </a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6" style="text-align: center; color: rgba(255,255,255,0.5); padding: 40px;">
+                    No services found. <a href="{% url 'custom_admin:service_create' %}">Create one</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

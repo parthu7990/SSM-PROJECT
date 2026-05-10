@@ -1,0 +1,44 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Page Not Found | PSK Future Innovation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Inter',sans-serif;background:#020617;color:#f8fafc;min-height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden}
+        .blob{position:fixed;border-radius:50%;filter:blur(80px);opacity:.3;animation:float 20s infinite ease-in-out}
+        .b1{width:500px;height:500px;background:linear-gradient(135deg,#6366f1,#8b5cf6);top:-200px;left:-200px}
+        .b2{width:400px;height:400px;background:linear-gradient(135deg,#ec4899,#6366f1);bottom:-150px;right:-150px;animation-delay:-10s}
+        @keyframes float{0%,100%{transform:translate(0,0)}50%{transform:translate(60px,40px)}}
+        .container{text-align:center;z-index:1;padding:40px}
+        .error-code{font-family:'Space Grotesk',sans-serif;font-size:160px;font-weight:800;line-height:1;background:linear-gradient(135deg,#6366f1,#ec4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:pulse 2s infinite}
+        @keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+        h2{font-size:32px;margin:20px 0 15px;color:#f8fafc}
+        p{color:#94a3b8;font-size:18px;margin-bottom:40px;max-width:500px;margin-left:auto;margin-right:auto}
+        .glass-card{background:rgba(255,255,255,.05);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:50px;display:inline-block}
+        .btn{display:inline-flex;align-items:center;gap:10px;padding:14px 32px;background:linear-gradient(135deg,#6366f1,#8b5cf6);border-radius:12px;color:#fff;text-decoration:none;font-weight:600;font-size:16px;transition:all .3s;margin:8px}
+        .btn:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(99,102,241,.4)}
+        .btn-outline{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.15)}
+        .btn-outline:hover{background:rgba(255,255,255,.1);box-shadow:none}
+    </style>
+</head>
+<body>
+    <div class="blob b1"></div>
+    <div class="blob b2"></div>
+    <div class="container">
+        <div class="glass-card">
+            <div class="error-code">404</div>
+            <h2>Page Not Found</h2>
+            <p>The page you are looking for doesn't exist or has been moved.</p>
+            <div>
+                <a href="/" class="btn"><i class="fas fa-home"></i> Go Home</a>
+                <a href="/#contact" class="btn btn-outline"><i class="fas fa-envelope"></i> Contact Us</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

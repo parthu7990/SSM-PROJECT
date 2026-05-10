@@ -1,0 +1,177 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="description" content="PSK Future Innovation FZE - Enterprise IT Infrastructure, Digital Transformation, and Branding Solutions in UAE">
+    <meta name="keywords" content="IT infrastructure, digital transformation, UAE, Sharjah, enterprise, cloud solutions">
+    <title>{% block title %}PSK Future Innovation FZE – Enterprise Innovation With Measurable Impact{% endblock %}</title>
+
+    <!-- Favicon placeholder -->
+    <link rel="icon" type="image/png" href="{% static 'images/favicon.png' %}" onerror="this.remove()">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- AOS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+<!-- ===== PRELOADER ===== -->
+<div class="preloader" id="preloader">
+    <div class="preloader-inner">
+        <div class="preloader-logo">PSK</div>
+        <div class="preloader-bar"><div class="preloader-fill"></div></div>
+    </div>
+</div>
+
+<!-- ===== ANIMATED BG ===== -->
+<div class="bg-animation">
+    <div class="gradient-blob blob-1"></div>
+    <div class="gradient-blob blob-2"></div>
+    <div class="gradient-blob blob-3"></div>
+    <div class="particles" id="particles"></div>
+</div>
+
+<!-- ===== NAVIGATION ===== -->
+<nav class="navbar" id="navbar">
+    <div class="container">
+        <div class="nav-content">
+            <a href="{% url 'home' %}#home" class="logo">
+                {% if company_info and company_info.logo %}
+                    <img src="{{ company_info.logo_url }}" alt="PSK Logo" class="logo-img">
+                {% else %}
+                    <span class="logo-text">PSK</span><span class="logo-sub"> Future Innovation</span>
+                {% endif %}
+            </a>
+
+            <div class="nav-links" id="navLinks">
+                <a href="#home"     class="nav-link">Home</a>
+                <a href="#about"    class="nav-link">About Us</a>
+                <a href="#services" class="nav-link">Services</a>
+                <a href="#clients"  class="nav-link">Clients</a>
+                <a href="#contact"  class="nav-link cta-btn">Contact Us</a>
+            </div>
+
+            <div class="hamburger" id="hamburger" aria-label="Menu">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- ===== MAIN CONTENT ===== -->
+<main>{% block content %}{% endblock %}</main>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+    <div class="footer-top-line"></div>
+    <div class="container">
+        <div class="footer-content">
+
+            <div class="footer-section" data-aos="fade-up">
+                <h3>{{ company_info.company_name|default:"PSK Future Innovation FZE" }}</h3>
+                <p>{{ company_info.tagline|default:"Enterprise Innovation With Measurable Impact" }}</p>
+                <div class="social-links">
+                    {% if company_info.facebook_url  %}<a href="{{ company_info.facebook_url  }}" target="_blank" aria-label="Facebook" ><i class="fab fa-facebook-f"></i></a>{% endif %}
+                    {% if company_info.twitter_url   %}<a href="{{ company_info.twitter_url   }}" target="_blank" aria-label="Twitter"  ><i class="fab fa-twitter"></i></a>{% endif %}
+                    {% if company_info.linkedin_url  %}<a href="{{ company_info.linkedin_url  }}" target="_blank" aria-label="LinkedIn" ><i class="fab fa-linkedin-in"></i></a>{% endif %}
+                    {% if company_info.instagram_url %}<a href="{{ company_info.instagram_url }}" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>{% endif %}
+                    {% if company_info.youtube_url   %}<a href="{{ company_info.youtube_url   }}" target="_blank" aria-label="YouTube"  ><i class="fab fa-youtube"></i></a>{% endif %}
+                    <!-- Default social placeholders -->
+                    {% if not company_info %}
+                    <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="footer-section" data-aos="fade-up" data-aos-delay="100">
+                <h4>Contact Details</h4>
+                <ul>
+                    <li><i class="fas fa-map-marker-alt"></i>{{ company_info.address|default:"Sharjah Publishing City Free Zone, Sharjah, UAE" }}</li>
+                    <li><i class="fas fa-phone"></i><a href="tel:{{ company_info.phone|default:'+97158268480' }}">{{ company_info.phone|default:"+971 58 268 4800" }}</a></li>
+                    <li><i class="fas fa-envelope"></i><a href="mailto:{{ company_info.email|default:'info@pskfutureinnovation.com' }}">{{ company_info.email|default:"info@pskfutureinnovation.com" }}</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section" data-aos="fade-up" data-aos-delay="200">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="#home"><i class="fas fa-chevron-right"></i>Home</a></li>
+                    <li><a href="#about"><i class="fas fa-chevron-right"></i>About Us</a></li>
+                    <li><a href="#services"><i class="fas fa-chevron-right"></i>Services</a></li>
+                    <li><a href="#clients"><i class="fas fa-chevron-right"></i>Our Clients</a></li>
+                    <li><a href="#contact"><i class="fas fa-chevron-right"></i>Contact Us</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section" data-aos="fade-up" data-aos-delay="300">
+                <h4>Core Services</h4>
+                <ul>
+                    <li><i class="fas fa-network-wired"></i>IT Infrastructure &amp; Networking</li>
+                    <li><i class="fas fa-cloud"></i>Cloud &amp; Datacenter Solutions</li>
+                    <li><i class="fas fa-robot"></i>AI &amp; Automation</li>
+                    <li><i class="fas fa-digital-tachograph"></i>Digital Transformation</li>
+                    <li><i class="fas fa-paint-brush"></i>Branding &amp; Marketing</li>
+                </ul>
+            </div>
+
+        </div>
+
+        <!-- Newsletter bar -->
+        <div class="footer-newsletter glass-card" data-aos="fade-up">
+            <div class="newsletter-text">
+                <i class="fas fa-paper-plane"></i>
+                <div>
+                    <h4>Stay Updated</h4>
+                    <p>Get the latest insights on enterprise innovation.</p>
+                </div>
+            </div>
+            <form class="newsletter-form" id="newsletterForm">
+                {% csrf_token %}
+                <input type="email" name="email" placeholder="Enter your email address" required>
+                <button type="submit" class="glass-btn btn-primary">Subscribe</button>
+            </form>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; {% now "Y" %} PSK Future Innovation FZE. All rights reserved. | Sharjah Publishing City Free Zone, UAE</p>
+        </div>
+    </div>
+</footer>
+
+<!-- ===== FLOATING BUTTONS ===== -->
+<button class="scroll-top" id="scrollTop" aria-label="Scroll to top">
+    <i class="fas fa-arrow-up"></i>
+</button>
+
+<a href="https://wa.me/97158268480" target="_blank" class="whatsapp-btn" aria-label="WhatsApp">
+    <i class="fab fa-whatsapp"></i>
+    <span class="wa-tooltip">Chat on WhatsApp</span>
+</a>
+
+<!-- ===== TOAST NOTIFICATION ===== -->
+<div class="toast" id="toast">
+    <i class="fas fa-check-circle toast-icon"></i>
+    <span class="toast-msg"></span>
+</div>
+
+<!-- Scripts -->
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script src="{% static 'js/main.js' %}"></script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

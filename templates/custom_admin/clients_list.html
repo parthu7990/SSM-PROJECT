@@ -1,0 +1,67 @@
+{% extends 'custom_admin/base.html' %}
+
+{% block title %}Clients{% endblock %}
+{% block page_title %}Clients Portfolio{% endblock %}
+
+{% block content %}
+<div class="admin-table-wrapper">
+    <div class="table-header">
+        <h2>All Clients</h2>
+        <a href="{% url 'custom_admin:client_create' %}" class="btn btn-primary btn-sm">
+            <i class="fas fa-plus"></i> Add Client
+        </a>
+    </div>
+    
+    <table class="admin-table">
+        <thead>
+            <tr>
+                <th>Logo</th>
+                <th>Name</th>
+                <th>Website</th>
+                <th>Order</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for client in clients %}
+            <tr>
+                <td>
+                    <img src="{{ client.logo_url }}" alt="{{ client.name }}" style="width: 60px; height: auto; border-radius: 8px;">
+                </td>
+                <td>{{ client.name }}</td>
+                <td>
+                    {% if client.website_url %}
+                    <a href="{{ client.website_url }}" target="_blank" style="color: #6366f1;">Visit</a>
+                    {% else %}
+                    —
+                    {% endif %}
+                </td>
+                <td>{{ client.order }}</td>
+                <td>
+                    {% if client.is_active %}
+                    <span class="badge badge-resolved">Active</span>
+                    {% else %}
+                    <span class="badge badge-closed">Inactive</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{% url 'custom_admin:client_edit' client.pk %}" class="btn btn-primary btn-sm">
+                        <i class="fas fa-edit"></i> Edit
+                    </a>
+                    <a href="{% url 'custom_admin:client_delete' client.pk %}" class="btn btn-danger btn-sm">
+                        <i class="fas fa-trash"></i> Delete
+                    </a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6" style="text-align: center; color: rgba(255,255,255,0.5); padding: 40px;">
+                    No clients found. <a href="{% url 'custom_admin:client_create' %}">Add one</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

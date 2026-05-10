@@ -1,0 +1,76 @@
+{% extends 'custom_admin/base.html' %}
+
+{% block title %}{{ action }} Service{% endblock %}
+{% block page_title %}{{ action }} Service{% endblock %}
+
+{% block content %}
+<div class="admin-table-wrapper">
+    <div class="table-header">
+        <h2>{{ action }} Service</h2>
+        <a href="{% url 'custom_admin:services_list' %}" class="btn btn-outline btn-sm">
+            <i class="fas fa-arrow-left"></i> Back to List
+        </a>
+    </div>
+    
+    <form method="post" enctype="multipart/form-data" style="padding: 30px;">
+        {% csrf_token %}
+        
+        <div class="form-grid">
+            <div class="form-group">
+                <label>Title *</label>
+                {{ form.title }}
+            </div>
+            
+            <div class="form-group">
+                <label>Category *</label>
+                {{ form.category }}
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label>Description *</label>
+            {{ form.description }}
+        </div>
+        
+        <div class="form-grid">
+            <div class="form-group">
+                <label>Icon Image</label>
+                {{ form.icon }}
+                {% if service.icon_url %}
+                <p style="margin-top: 10px;">
+                    <img src="{{ service.icon_url }}" alt="Current icon" style="max-width: 100px; border-radius: 8px;">
+                </p>
+                {% endif %}
+            </div>
+            
+            <div class="form-group">
+                <label>Service Image *</label>
+                {{ form.image }}
+                {% if service.image_url %}
+                <p style="margin-top: 10px;">
+                    <img src="{{ service.image_url }}" alt="Current image" style="max-width: 200px; border-radius: 8px;">
+                </p>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="form-grid">
+            <div class="form-group">
+                <label>Order</label>
+                {{ form.order }}
+            </div>
+            
+            <div class="form-group">
+                <label style="display: flex; align-items: center; gap: 10px;">
+                    {{ form.is_active }}
+                    Active
+                </label>
+            </div>
+        </div>
+        
+        <button type="submit" class="btn btn-primary">
+            <i class="fas fa-save"></i> Save Service
+        </button>
+    </form>
+</div>
+{% endblock %}
