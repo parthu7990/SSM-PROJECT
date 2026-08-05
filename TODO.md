@@ -18,3 +18,12 @@
 - [x] 4. Update `settings.py` for Vercel (ALLOWED_HOSTS, CSRF, SSL redirect)
 - [x] 5. Update `DEPLOYMENT.md` with Vercel instructions (incl. "How Vercel Deployment Works" section)
 - [x] 6. Verify with `manage.py check` and handler test
+
+## Admin Superuser Auto-Creation (Supabase/Deploy)
+- [x] 1. Create `ensure_admin` management command (idempotent, env-based credentials)
+- [x] 2. Wire `ensure_admin` into `build.sh` (runs on every Railway deploy)
+- [x] 3. Add `ADMIN_USERNAME` / `ADMIN_EMAIL` / `ADMIN_PASSWORD` to `.env.example`
+- [x] 4. Document `ensure_admin` in `DEPLOYMENT.md` (Vercel + Railway sections)
+- [x] 5. Add Supabase database setup section to `DEPLOYMENT.md`
+- [x] 6. Test `ensure_admin` on fresh DB (creates Parth/Parth@7990) and existing DB (updates)
+- [x] 7. Verify superuser credentials work (login, is_staff, is_superuser)

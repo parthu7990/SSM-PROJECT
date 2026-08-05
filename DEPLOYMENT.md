@@ -1,4 +1,4 @@
-# Deployment Guide - SSM Future Innovation FZE Website
+# Deployment Guide - PSK Future Innovation FZE Website
 
 ## Vercel Deployment
 
@@ -40,31 +40,35 @@ Add these in Vercel **Project → Settings → Environment Variables**:
 |----------|----------|-------------|
 | `SECRET_KEY` | ✅ | Django secret key (generate with: `python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"`) |
 | `DEBUG` | ✅ | Set to `False` |
-| `DATABASE_URL` | ✅ | PostgreSQL connection string |
+| `DATABASE_URL` | ✅ | PostgreSQL connection string (e.g., Supabase) |
 | `CLOUDINARY_CLOUD_NAME` | ⚠️ | Cloudinary cloud name (required for media uploads) |
 | `CLOUDINARY_API_KEY` | ⚠️ | Cloudinary API key |
 | `CLOUDINARY_API_SECRET` | ⚠️ | Cloudinary API secret |
 | `EMAIL_HOST_USER` | Optional | SMTP email (e.g., gmail) |
 | `EMAIL_HOST_PASSWORD` | Optional | SMTP password / app password |
 | `ADMIN_EMAIL` | Optional | Where to receive inquiry emails |
+| `ADMIN_USERNAME` | Optional | Superuser username (default: `Parth`) |
+| `ADMIN_PASSWORD` | Optional | Superuser password (default: `Parth@7990`) |
 
 > **Note:** `VERCEL` and `VERCEL_URL` are **auto-set** by Vercel — no need to add them manually. The settings automatically add your `*.vercel.app` domain to `ALLOWED_HOSTS` and `CSRF_TRUSTED_ORIGINS`.
 
 > **⚠️ Critical — Database & Media:**
 > - Vercel's serverless filesystem is **read-only and ephemeral**. SQLite will NOT work.
-> - You **must** set `DATABASE_URL` to an external PostgreSQL database.
+> - You **must** set `DATABASE_URL` to an external PostgreSQL database (e.g., Supabase).
 > - Uploaded media/images **must** use Cloudinary (set the 3 `CLOUDINARY_*` vars). Local `/media/` storage will not persist.
 
-### 4. Run Database Migrations
+### 4. Run Database Migrations & Create Admin
 
-Vercel doesn't run migrations automatically. After deploy, run them locally against your production DB:
+Vercel doesn't run migrations automatically. After deploy, run them against your production DB:
 ```bash
 # Set DATABASE_URL to your production PostgreSQL URL, then:
 python manage.py migrate
 python manage.py setup_initial_data
-python manage.py createsuperuser
+python manage.py ensure_admin   # creates superuser (Parth / Parth@7990 automatically)
 ```
-Or use a one-off script / admin command against the production database.
+The `ensure_admin` command creates/updates the default superuser using the
+`ADMIN_USERNAME`, `ADMIN_EMAIL`, and `ADMIN_PASSWORD` env vars (with the
+defaults `Parth` / `parth20098@gmail.com` / `Parth@7990`).
 
 ### 5. Access the App
 - Your app will be available at `https://your-project.vercel.app`
@@ -179,13 +183,15 @@ Add these variables in the Railway **Variables** tab:
 
 ### 6. Create Admin User
 
-After first deploy, create a superuser:
+The admin superuser is **created automatically on every build** via the
+`ensure_admin` command in `build.sh`. It uses these env vars (with defaults):
+- `ADMIN_USERNAME` (default: `Parth`)
+- `ADMIN_EMAIL` (default: `parth20098@gmail.com`)
+- `ADMIN_PASSWORD` (default: `Parth@7990`)
+
+To run it manually:
 ```bash
-railway run python manage.py createsuperuser
-```
-Or via Railway **Shell**:
-```bash
-python manage.py createsuperuser
+python manage.py ensure_admin
 ```
 
 ### 7. Access the App
@@ -196,6 +202,46 @@ python manage.py createsuperuser
 ### 8. Custom Domain (Optional)
 1. In Railway, go to your service → **Settings** → **Networking** → **Generate Domain**
 2. Add a custom domain and set `ALLOWED_HOSTS` and `CSRF_TRUSTED_ORIGINS` env vars
+
+---
+
+## Supabase (Database) Setup
+
+If you prefer to use **Supabase** as your PostgreSQL database (instead of
+Railway's built-in Postgres), follow these steps. This works for **both**
+Railway and Vercel deployments.
+
+### 1. Create a Supabase Project
+1. Go to [Supabase](https://supabase.com) → **New Project**
+2. Name your project and set a database password
+3. Wait for the project to finish provisioning
+
+### 2. Get the Connection String
+1. In Supabase Dashboard → **Project Settings** → **Database**
+2. Under **Connection string** → **URI**, copy the PostgreSQL connection string
+   (it looks like `postgresql://postgres.xxxx:password@aws-0-xxx.pooler.supabase.com:5432/postgres`)
+
+### 3. Set the `DATABASE_URL` Environment Variable
+Add the copied connection string as the `DATABASE_URL` variable in your
+deployment platform (Railway **Variables** tab, or Vercel **Environment
+Variables**).
+
+> **Note:** If the password contains special characters, you may need to
+> URL-encode them. The `dj-database-url` library parses this automatically.
+
+### 4. Run Migrations
+Run migrations and initialize data against Supabase:
+```bash
+DATABASE_URL="postgresql://postgres.xxxx:password@...:5432/postgres" python manage.py migrate
+DATABASE_URL="postgresql://postgres.xxxx:password@...:5432/postgres" python manage.py setup_initial_data
+DATABASE_URL="postgresql://postgres.xxxx:password@...:5432/postgres" python manage.py ensure_admin
+```
+On Railway, `build.sh` runs `migrate`, `setup_initial_data`, and `ensure_admin`
+automatically on every deploy — so you only need to set `DATABASE_URL`.
+
+### 5. Verify
+- Open the admin panel and log in with `Parth` / `Parth@7990`
+- Confirm services, clients, and testimonials are seeded (from `setup_initial_data`)
 
 ---
 

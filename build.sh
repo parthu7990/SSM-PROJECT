@@ -15,4 +15,7 @@ python manage.py migrate --noinput
 echo "🌱 Seeding initial data..."
 python manage.py setup_initial_data || echo "⚠️  Initial data setup skipped (may already exist)"
 
+echo "👤 Ensuring admin superuser..."
+python manage.py ensure_admin || echo "⚠️  Admin setup skipped"
+
 echo "✅ Build complete!"
