@@ -1,8 +1,86 @@
 # Deployment Guide - SSM Future Innovation FZE Website
 
-## Railway Deployment (Recommended)
+## Vercel Deployment
 
-This project is fully configured for **Railway** deployment. Follow these steps:
+This project is fully configured for **Vercel** deployment as a Django serverless application.
+
+### How It Works
+- Vercel runs the Django app as a **serverless Python function** via `api/index.py`
+- `api/index.py` exposes a `handler(request)` function that bridges Vercel's serverless request model to Django's WSGI application (no third-party wrapper needed)
+- Static files are served by **WhiteNoise** through the WSGI application
+- Media/uploads must use **Cloudinary** (serverless filesystem is read-only & ephemeral)
+
+### 1. Prerequisites
+- A [Vercel](https://vercel.com) account
+- A managed PostgreSQL database (e.g., [Neon](https://neon.tech), [Supabase](https://supabase.com), or Railway Postgres)
+- (Optional) A [Cloudinary](https://cloudinary.com) account for media storage
+- The project pushed to a GitHub repository
+
+### 2. Deploy to Vercel
+
+#### Option A: Vercel Dashboard (Recommended)
+1. Go to [Vercel](https://vercel.com) → **Add New** → **Project**
+2. Import your GitHub repository
+3. Vercel auto-detects the `vercel.json` config and Python build
+4. Add the environment variables (see step 3)
+5. Click **Deploy**
+
+#### Option B: Vercel CLI
+```bash
+npm i -g vercel
+vercel login
+vercel
+```
+
+### 3. Configure Environment Variables
+
+Add these in Vercel **Project → Settings → Environment Variables**:
+
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `SECRET_KEY` | ✅ | Django secret key (generate with: `python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"`) |
+| `DEBUG` | ✅ | Set to `False` |
+| `DATABASE_URL` | ✅ | PostgreSQL connection string |
+| `CLOUDINARY_CLOUD_NAME` | ⚠️ | Cloudinary cloud name (required for media uploads) |
+| `CLOUDINARY_API_KEY` | ⚠️ | Cloudinary API key |
+| `CLOUDINARY_API_SECRET` | ⚠️ | Cloudinary API secret |
+| `EMAIL_HOST_USER` | Optional | SMTP email (e.g., gmail) |
+| `EMAIL_HOST_PASSWORD` | Optional | SMTP password / app password |
+| `ADMIN_EMAIL` | Optional | Where to receive inquiry emails |
+
+> **Note:** `VERCEL` and `VERCEL_URL` are **auto-set** by Vercel — no need to add them manually. The settings automatically add your `*.vercel.app` domain to `ALLOWED_HOSTS` and `CSRF_TRUSTED_ORIGINS`.
+
+> **⚠️ Critical — Database & Media:**
+> - Vercel's serverless filesystem is **read-only and ephemeral**. SQLite will NOT work.
+> - You **must** set `DATABASE_URL` to an external PostgreSQL database.
+> - Uploaded media/images **must** use Cloudinary (set the 3 `CLOUDINARY_*` vars). Local `/media/` storage will not persist.
+
+### 4. Run Database Migrations
+
+Vercel doesn't run migrations automatically. After deploy, run them locally against your production DB:
+```bash
+# Set DATABASE_URL to your production PostgreSQL URL, then:
+python manage.py migrate
+python manage.py setup_initial_data
+python manage.py createsuperuser
+```
+Or use a one-off script / admin command against the production database.
+
+### 5. Access the App
+- Your app will be available at `https://your-project.vercel.app`
+- Admin panel: `https://your-project.vercel.app/admin/login/`
+- Django admin (backup): `https://your-project.vercel.app/django-admin/`
+
+### 6. Custom Domain (Optional)
+1. In Vercel, go to Project → **Settings** → **Domains**
+2. Add your custom domain
+3. Update `ALLOWED_HOSTS` and `CSRF_TRUSTED_ORIGINS` env vars to include your domain
+
+---
+
+## Railway Deployment
+
+This project is also fully configured for **Railway** deployment. Follow these steps:
 
 ### 1. Prerequisites
 - A [Railway](https://railway.app) account

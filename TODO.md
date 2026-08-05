@@ -1,15 +1,20 @@
-# Railway Deployment - Task Checklist
+# Deployment - Task Checklist
 
-## Steps
-- [x] 1. Create `.gitignore` to prevent committing venv, db.sqlite3, .env, __pycache__
-- [x] 2. Update `requirements.txt` for reliable Railway installation
-- [x] 3. Create `railway.json` config for Railway deployment
-- [x] 4. Update `build.sh` for Railway
-- [x] 5. Update `Procfile` for Railway
-- [x] 6. Fix `settings.py` for Railway (Cloudinary env bug, static storage, hosts, CSRF)
-- [x] 7. Fix `favicon.png` reference / add default favicon
-- [x] 8. Fix hardcoded `/static/js/admin.js` in custom_admin/base.html
-- [x] 9. Clean up duplicate nested `migrations/migrations/` directories
-- [x] 10. Add `.env.example` with Railway-compatible variables
-- [x] 11. Update `DEPLOYMENT.md` with Railway instructions
-- [x] 12. Verify with `manage.py check` and `collectstatic`
+## Railway Deployment (Primary Task)
+- [x] 1. Verify `railway.json` configuration (Nixpacks build + gunicorn start)
+- [x] 2. Verify `build.sh` (install deps, collectstatic, migrate, seed data)
+- [x] 3. Verify `Procfile` (gunicorn web server)
+- [x] 4. Verify `settings.py` for Railway (PostgreSQL via DATABASE_URL, ALLOWED_HOSTS, CSRF)
+- [x] 5. Verify `requirements.txt` (gunicorn, psycopg2-binary, dj-database-url, whitenoise)
+- [x] 6. Verify database migrations & seeding (`setup_initial_data`)
+- [x] 7. Verify image/storage handling (Cloudinary + local fallback)
+- [x] 8. Verify static files (collectstatic + WhiteNoise)
+- [x] 9. Verify all pages render (homepage, admin, static assets)
+
+## Vercel Deployment (Additional)
+- [x] 1. Create `api/index.py` Vercel WSGI serverless handler
+- [x] 2. Create/verify `vercel.json` configuration
+- [x] 3. Update `requirements.txt` (removed unavailable `vercel-wsgi`)
+- [x] 4. Update `settings.py` for Vercel (ALLOWED_HOSTS, CSRF, SSL redirect)
+- [x] 5. Update `DEPLOYMENT.md` with Vercel instructions
+- [x] 6. Verify with `manage.py check` and handler test

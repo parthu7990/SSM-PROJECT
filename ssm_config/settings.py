@@ -1,6 +1,6 @@
 """
 Django settings for PSK Future Innovation FZE
-Production-ready with Cloudinary + Railway support
+Production-ready with Cloudinary + Railway + Vercel support
 """
 
 from pathlib import Path
@@ -22,16 +22,27 @@ if RAILWAY_PUBLIC_DOMAIN:
     ALLOWED_HOSTS = list(ALLOWED_HOSTS) + \
         [RAILWAY_PUBLIC_DOMAIN, f'*.{RAILWAY_PUBLIC_DOMAIN}']
 
+# Vercel provides the deployment domain automatically via VERCEL_URL
+VERCEL = config('VERCEL', default=False, cast=bool)
+VERCEL_URL = config('VERCEL_URL', default='')
+if VERCEL and VERCEL_URL:
+    ALLOWED_HOSTS = list(ALLOWED_HOSTS) + [VERCEL_URL, f'*.{VERCEL_URL}']
+
 # Trusted origins for CSRF (Railway HTTPS domains)
 CSRF_TRUSTED_ORIGINS = config(
     'CSRF_TRUSTED_ORIGINS',
-    default='https://*.up.railway.app,https://*.railway.app',
+    default='https://*.up.railway.app,https://*.railway.app,https://*.vercel.app',
     cast=Csv()
 )
 if RAILWAY_PUBLIC_DOMAIN:
     CSRF_TRUSTED_ORIGINS = list(CSRF_TRUSTED_ORIGINS) + [
         f'https://{RAILWAY_PUBLIC_DOMAIN}',
         f'https://www.{RAILWAY_PUBLIC_DOMAIN}',
+    ]
+if VERCEL and VERCEL_URL:
+    CSRF_TRUSTED_ORIGINS = list(CSRF_TRUSTED_ORIGINS) + [
+        f'https://{VERCEL_URL}',
+        f'https://www.{VERCEL_URL}',
     ]
 
 # ── Apps ───────────────────────────────────────────────────
@@ -166,7 +177,10 @@ ADMIN_EMAIL = config('ADMIN_EMAIL', default='info@pskfutureinnovation.com')
 # ── Security (production) ──────────────────────────────────
 if not DEBUG:
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-    SECURE_SSL_REDIRECT = True
+    # On Vercel, the edge network terminates HTTPS before reaching the
+    # serverless function. Enabling SECURE_SSL_REDIRECT there would cause
+    # redirect loops, so disable it when running on Vercel.
+    SECURE_SSL_REDIRECT = not VERCEL
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
     SECURE_BROWSER_XSS_FILTER = True

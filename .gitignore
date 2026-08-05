@@ -44,3 +44,7 @@ Thumbs.db
 
 # Railway
 .railway/
+
+# Vercel
+.vercel/
+.vercelignore
