@@ -114,8 +114,17 @@ defaults `Parth` / `parth20098@gmail.com` / `Parth@7990`).
 - Vercel auto-sets `VERCEL=true` and `VERCEL_URL=<deployment-domain>`.
 - `settings.py` automatically appends `VERCEL_URL` and `*.vercel.app` to `ALLOWED_HOSTS` and `CSRF_TRUSTED_ORIGINS`.
 
-### Database Migrations
-- Vercel does **not** run `migrate` automatically. Run migrations and seed data against your production database after deploy (see Step 4 above).
+### Database Migrations & Admin Auto-Creation
+- `api/index.py` now calls `initialize_database()` on **cold start**, which
+  automatically runs `migrate` and `ensure_admin` against the production
+  database (`DATABASE_URL`). This means migrations apply and the admin
+  superuser (`Parth / Parth@7990` by default) is created/updated the first
+  time the serverless function warms up after a deploy.
+- The initialization is **idempotent** and **guarded**: it's a no-op once
+  migrations are up to date and admin exists, and it's wrapped in
+  `try/except` so a transient DB error won't crash the function.
+- You can still run these manually against your production DB if needed
+  (see Step 4 above).
 
 ---
 
