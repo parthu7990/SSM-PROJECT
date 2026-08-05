@@ -8,6 +8,10 @@ event and reading the WSGI ``start_response`` output back into a response.
 
 This approach requires no third-party ``vercel-wsgi`` package and works
 reliably on Vercel's ``@vercel/python`` builder.
+
+Because Vercel does not run ``build.sh``, the production database (e.g.
+Supabase Postgres) is migrated and the admin superuser is created exactly
+once on the first cold start via ``initialize_database()``.
 """
 import io
 import os
@@ -22,6 +26,47 @@ if PROJECT_ROOT not in sys.path:
     sys.path.insert(0, PROJECT_ROOT)
 
 from ssm_config.wsgi import application  # noqa: E402
+
+
+def initialize_database():
+    """
+    Run migrations and ensure the admin superuser exists against the
+    configured production database (DATABASE_URL). Called once per cold
+    start so a fresh Vercel deployment is correctly provisioned.
+
+    The whole block is wrapped in try/except so that a transient DB error
+    during cold start does not fail the serverless function. On a warm
+    instance this is effectively a no-op.
+    """
+    import django
+    from django.db import connection
+
+    django.setup()
+
+    # Bail out if no production database is configured (local/dev run).
+    if not os.environ.get('DATABASE_URL'):
+        return
+
+    try:
+        # Run pending migrations (no-op when up to date).
+        from django.core.management import call_command
+        call_command('migrate', interactive=False)
+
+        # Create / update the admin superuser (idempotent).
+        call_command('ensure_admin')
+    except Exception as exc:  # pragma: no cover - defensive
+        print(f'[django vercel] DB init skipped: {exc}')
+    finally:
+        # Release the DB connection opened during setup.
+        try:
+            connection.close()
+        except Exception:
+            pass
+
+
+# Provision the database on cold start (idempotent + guarded so local
+# development with SQLite is unaffected).
+initialize_database()
 
 
 def handler(request):
