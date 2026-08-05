@@ -16,5 +16,5 @@
 - [x] 2. Create/verify `vercel.json` configuration
 - [x] 3. Update `requirements.txt` (removed unavailable `vercel-wsgi`)
 - [x] 4. Update `settings.py` for Vercel (ALLOWED_HOSTS, CSRF, SSL redirect)
-- [x] 5. Update `DEPLOYMENT.md` with Vercel instructions
+- [x] 5. Update `DEPLOYMENT.md` with Vercel instructions (incl. "How Vercel Deployment Works" section)
 - [x] 6. Verify with `manage.py check` and handler test

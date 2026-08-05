@@ -78,6 +78,43 @@ Or use a one-off script / admin command against the production database.
 
 ---
 
+## How Vercel Deployment Works
+
+### Serverless Entry Point (`api/index.py`)
+- Vercel's `@vercel/python` builder invokes the `handler(request)` function in `api/index.py` for every request.
+- The handler builds a WSGI `environ` from Vercel's request object and calls Django's WSGI `application` directly — **no third-party `vercel-wsgi` package is required** (that package does not exist on PyPI).
+- It sets the `HTTP_X_FORWARDED_PROTO: https` header so Django's `SECURE_PROXY_SSL_HEADER` check passes, and `SECURE_SSL_REDIRECT` is disabled on Vercel to avoid redirect loops.
+
+### Routing (`vercel.json`)
+```json
+{
+  "builds": [
+    { "src": "api/index.py", "use": "@vercel/python" }
+  ],
+  "routes": [
+    { "src": "/(.*)", "dest": "api/index.py" }
+  ]
+}
+```
+
+### Static Files
+- WhiteNoise serves collected static files through the WSGI application.
+- `collectstatic` output is not committed to Git; Vercel collects static files during build via the Python build step.
+
+### Database & Media (critical)
+- **SQLite will NOT work** on Vercel because the serverless filesystem is read-only and ephemeral.
+- You **must** set `DATABASE_URL` to an external PostgreSQL (Neon, Supabase, Railway Postgres, etc.).
+- Uploaded media **must** use Cloudinary (set `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET`). Local `/media/` storage will not persist.
+
+### Auto-Domain Handling
+- Vercel auto-sets `VERCEL=true` and `VERCEL_URL=<deployment-domain>`.
+- `settings.py` automatically appends `VERCEL_URL` and `*.vercel.app` to `ALLOWED_HOSTS` and `CSRF_TRUSTED_ORIGINS`.
+
+### Database Migrations
+- Vercel does **not** run `migrate` automatically. Run migrations and seed data against your production database after deploy (see Step 4 above).
+
+---
+
 ## Railway Deployment
 
 This project is also fully configured for **Railway** deployment. Follow these steps:

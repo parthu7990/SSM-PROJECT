@@ -64,29 +64,29 @@ def admin_logout(request):
     return redirect('custom_admin:login')
 
 
-@login_required
-@user_passes_test(is_staff)
+
 def dashboard(request):
-    """Admin dashboard"""
+    if not request.user.is_authenticated:
+        return redirect("custom_admin:login")
+
+    if not is_staff(request.user):
+        return redirect("custom_admin:login")
+
     # Statistics
     total_inquiries = ContactInquiry.objects.count()
     new_inquiries = ContactInquiry.objects.filter(status='new').count()
     total_clients = Client.objects.filter(is_active=True).count()
     total_services = Service.objects.filter(is_active=True).count()
     newsletter_subscribers = Newsletter.objects.filter(is_active=True).count()
-    
-    # Recent inquiries
+
     recent_inquiries = ContactInquiry.objects.all()[:5]
-    
-    # Recent activities
     recent_activities = AdminActivity.objects.all()[:10]
-    
-    # Inquiry trends (last 7 days)
+
     last_7_days = timezone.now() - timedelta(days=7)
     inquiry_trend = ContactInquiry.objects.filter(
         created_at__gte=last_7_days
     ).extra({'date': 'date(created_at)'}).values('date').annotate(count=Count('id'))
-    
+
     context = {
         'total_inquiries': total_inquiries,
         'new_inquiries': new_inquiries,
@@ -97,9 +97,8 @@ def dashboard(request):
         'recent_activities': recent_activities,
         'inquiry_trend': inquiry_trend,
     }
-    
-    return render(request, 'custom_admin/dashboard.html', context)
 
+    return render(request, 'custom_admin/dashboard.html', context)
 
 @login_required
 @user_passes_test(is_staff)
